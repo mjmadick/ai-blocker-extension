@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "AI Blocker for Google Search",
+  "version": "0.1.0",
+  "description": "Suppresses Google's AI Overview in search results.",
+  "permissions": ["declarativeNetRequest", "declarativeNetRequestFeedback"],
+  "host_permissions": ["*://*.google.com/*"],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules/rules.json"
+      }
+    ]
+  }
+}
