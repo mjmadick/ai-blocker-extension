@@ -63,7 +63,7 @@
     "action": {
       "type": "redirect",
       "redirect": {
-        "regexSubstitution": "\\1\\2+-ai"
+        "regexSubstitution": "\\1\\2+-ai&webscp=1"
       }
     },
     "condition": {
