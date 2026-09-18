@@ -63,12 +63,12 @@
     "action": {
       "type": "redirect",
       "redirect": {
-        "regexSubstitution": "\\1\\2+-ai\\3"
+        "regexSubstitution": "\\1\\2+-ai"
       }
     },
     "condition": {
       "requestDomains": ["bing.com"],
-      "regexFilter": "^(.*[?&]q=)([^&]*)(.*)$",
+      "regexFilter": "([?&]q=)([^&]*)",
       "resourceTypes": ["main_frame"]
     }
   }

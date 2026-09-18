@@ -47,11 +47,24 @@ query parameter to set here. Two more rules handle this:
    `q` param, append `-ai` to it. This uses `redirect.regexSubstitution`
    rather than `redirect.transform.queryTransform` (what the Google rules
    use): `queryTransform.addOrReplaceParams` can only set a param to a
-   fixed literal value, it can't read and extend the existing value. The
-   `regexFilter` on the condition captures the URL into three groups
-   (everything up to and including `q=`, the existing value, everything
-   after), and `regexSubstitution` reassembles them with `-ai` spliced in
-   after the captured value.
+   fixed literal value, it can't read and extend the existing value.
+   `regexFilter: "([?&]q=)([^&]*)"` matches just the `q=value` part of the
+   URL, and `regexSubstitution: "\1\2+-ai"` replaces only that matched
+   span with itself plus the suffix — everything else in the URL is left
+   untouched automatically, the same way a normal find-and-replace only
+   touches the matched text.
+
+   The regex intentionally has **no unbounded `.*` wildcards**. An earlier
+   version wrapped the whole thing in `^(.*[?&]q=)([^&]*)(.*)$` to capture
+   "everything before" and "everything after" — Chrome's DNR flags regexes
+   with multiple unbounded wildcards like that as memory-unsafe, and only
+   evaluates unsafe regexes against short URLs; past some length it just
+   silently stops matching. That broke on real Bing URLs, which are ~200+
+   characters once Bing's own tracking params (`qs`, `form`, `sp`, `ghc`,
+   `lq`, `pq`, `sc`, `sk`, `cvid`, …) are attached, even though it matched
+   fine in isolated tests with a short URL. `chrome.declarativeNetRequest.isRegexSupported()`
+   can be used to check whether Chrome considers a given regex safe before
+   shipping it.
 
 Not scoped to a specific path (just `bing.com` + a `q` param present) since
 Bing doesn't put web search under a single consistent path the way Google
