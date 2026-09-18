@@ -1,6 +1,7 @@
 # AI Blocker for Google Search
 
-A Chrome extension that suppresses Google's "AI Overview" in search results.
+A Chrome extension that suppresses Google's "AI Overview" and "AI Mode" in
+search results.
 
 ## How it works
 
@@ -14,7 +15,10 @@ scoped to `google.com`, `/search` paths, `main_frame` requests only:
 
 1. **`udm=50` redirect rule** (priority 3, highest) — `udm=50` isn't one of
    Google's real tab codes but still triggers the AI Overview, so it's
-   caught specifically and rewritten to `udm=14`.
+   caught specifically and rewritten to `udm=14`. This also suppresses
+   "AI Mode": tapping the "AI Mode" tab re-requests the page with
+   `udm=50`, so this same rule catches it and rewrites it back to
+   `udm=14` — no separate content script needed.
 2. **Allow rule** (priority 2) — if the request has any *other* `udm=`
    value (e.g. `udm=2` for "Images", `udm=7` for "Videos"), leave it alone.
    This prevents the extension from fighting Google's own search tabs and
@@ -67,9 +71,9 @@ URL, independent of any real navigation.
 ## Status
 
 - [x] Suppress "AI Overview" via `udm=14` query rewrite
-- [ ] Suppress "AI Mode" (likely needs DOM removal via a content script,
-      since AI Mode is a separate tab/experience rather than a URL
-      parameter toggle)
+- [x] Suppress "AI Mode" — turned out to share the `udm=50` signal with
+      AI Overview, so the same redirect rule handles it. Tapping the
+      "AI Mode" tab is effectively a no-op.
 
 ## Notes
 
