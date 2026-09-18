@@ -37,36 +37,34 @@ query text (e.g. `how to golf` → `how to golf -ai`) — Bing treats it as an
 explicit exclusion term rather than a UI toggle, so there's no `udm`-style
 query parameter to set here. Two more rules handle this:
 
-4. **Allow rule** (priority 2) — if the `q` value already ends in `-ai`
-   (checked via `regexFilter`, since we need to match right at the end of
-   the value, not just anywhere in the URL), leave the request alone. This
-   is the loop guard: rule 5 always appends `-ai`, so without this, a
-   second pass would append it again, compounding into `-ai -ai -ai...`
-   forever.
-5. **Redirect rule** (priority 1) — for any other `bing.com` request with a
-   `q` param, append `-ai` to it **and** add `webscp=1`, which forces the
-   "Web" results tab (rather than "All"). This uses `redirect.regexSubstitution`
-   rather than `redirect.transform.queryTransform` (what the Google rules
-   use): `queryTransform.addOrReplaceParams` can only set a param to a
-   fixed literal value, it can't read and extend the existing value.
-   `regexFilter: "([?&]q=)([^&]*)"` matches just the `q=value` part of the
-   URL, and `regexSubstitution: "\1\2+-ai&webscp=1"` replaces only that
-   matched span with itself plus the suffix and the extra param —
-   everything else in the URL is left untouched automatically, the same
-   way a normal find-and-replace only touches the matched text.
+4. **`webscp` fixup rule** (priority 3, highest) — if the `q` value already
+   ends in `-ai`, make sure `webscp=1` is also set (forcing the "Web"
+   results tab instead of "All", which is where the "ask a follow-up" AI
+   prompt lives). Uses `queryTransform.addOrReplaceParams`, so it's
+   idempotent — safe to run on every request regardless of whether
+   `webscp` needs adding, fixing, or is already correct.
 
-   `webscp=1` is bundled into this *same* rule/substitution rather than
-   given its own guard+redirect pair, deliberately: two independent
-   unconditional redirect rules (one for `-ai`, one for `webscp`) can end
-   up starving each other depending on rule priority and on whether a
-   same-URL redirect causes Chrome to fall through to the next rule or
-   just stop — that fallthrough behavior isn't clearly documented, and
-   isn't worth relying on. Adding both params in one hop means the
-   existing "already has `-ai`" allow rule (rule 4) is a reliable guard
-   for both, since they're always added together. The only downside is a
-   harmless duplicate `webscp=1` if it was already present without `-ai`
-   (e.g. an in-progress URL Bing itself constructed) — not a real-world
-   concern.
+   This isn't just a redundant convenience: Bing appears to remember a
+   per-browser "no AI" preference once you've searched with `-ai`, and
+   will silently re-add `-ai` to a query itself — bypassing rule 5 (and
+   whatever it was going to do). If this rule just did `allow` when it
+   saw `-ai` (an earlier version did exactly that), then whenever Bing
+   supplies `-ai` on its own, the request gets waved through with
+   `webscp` never checked, landing back on "All" with the follow-up
+   prompt reachable again. Actively re-asserting `webscp=1` here, instead
+   of assuming "has `-ai`" implies "already fully handled", closes that
+   gap regardless of which of the two params exists.
+5. **Redirect rule** (priority 1, only reached when rule 4 didn't match,
+   i.e. `-ai` is missing) — append `-ai` to the `q` param **and** add
+   `webscp=1` together. Uses `redirect.regexSubstitution` rather than
+   `redirect.transform.queryTransform`: `queryTransform.addOrReplaceParams`
+   can only set a param to a fixed literal value, it can't read and
+   extend the existing value. `regexFilter: "([?&]q=)([^&]*)"` matches
+   just the `q=value` part of the URL, and
+   `regexSubstitution: "\1\2+-ai&webscp=1"` replaces only that matched
+   span with itself plus the suffix and the extra param — everything
+   else in the URL is left untouched automatically, the same way a
+   normal find-and-replace only touches the matched text.
 
    Forcing the Web tab means Images/Videos/Shopping/Maps results are no
    longer reachable through Bing's own tab UI (a `-ai`+`webscp=1` search

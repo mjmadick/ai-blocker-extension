@@ -49,8 +49,17 @@
   },
   {
     "id": 4,
-    "priority": 2,
-    "action": { "type": "allow" },
+    "priority": 3,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "transform": {
+          "queryTransform": {
+            "addOrReplaceParams": [{ "key": "webscp", "value": "1" }]
+          }
+        }
+      }
+    },
     "condition": {
       "requestDomains": ["bing.com"],
       "regexFilter": "[?&]q=[^&]*(?:\\+|%20)-ai(?:&|$)",
