@@ -54,7 +54,7 @@
     "condition": {
       "requestDomains": ["bing.com"],
       "regexFilter": "[?&]q=[^&]*(?:\\+|%20)-ai(?:&|$)",
-      "resourceTypes": ["main_frame"]
+      "resourceTypes": ["main_frame", "sub_frame"]
     }
   },
   {
@@ -69,7 +69,7 @@
     "condition": {
       "requestDomains": ["bing.com"],
       "regexFilter": "([?&]q=)([^&]*)",
-      "resourceTypes": ["main_frame"]
+      "resourceTypes": ["main_frame", "sub_frame"]
     }
   }
 ]

@@ -56,15 +56,30 @@ query parameter to set here. Two more rules handle this:
 
    The regex intentionally has **no unbounded `.*` wildcards**. An earlier
    version wrapped the whole thing in `^(.*[?&]q=)([^&]*)(.*)$` to capture
-   "everything before" and "everything after" — Chrome's DNR flags regexes
-   with multiple unbounded wildcards like that as memory-unsafe, and only
-   evaluates unsafe regexes against short URLs; past some length it just
-   silently stops matching. That broke on real Bing URLs, which are ~200+
-   characters once Bing's own tracking params (`qs`, `form`, `sp`, `ghc`,
-   `lq`, `pq`, `sc`, `sk`, `cvid`, …) are attached, even though it matched
-   fine in isolated tests with a short URL. `chrome.declarativeNetRequest.isRegexSupported()`
-   can be used to check whether Chrome considers a given regex safe before
-   shipping it.
+   "everything before" and "everything after", which matched fine in
+   isolated tests with a short URL but silently failed to match real Bing
+   search URLs — those run 200+ characters once Bing's own tracking params
+   (`qs`, `form`, `sp`, `ghc`, `lq`, `pq`, `sc`, `sk`, `cvid`, …) are
+   attached. The suspicion was that Chrome's DNR treats regexes with
+   multiple unbounded wildcards as "unsafe" and only evaluates unsafe
+   regexes against short URLs — but `chrome.declarativeNetRequest.isRegexSupported()`
+   reported the old pattern as supported too, so that specific mechanism
+   isn't confirmed. What's confirmed is that dropping the unbounded
+   wildcards (since `regexSubstitution` only needs to replace the matched
+   span, not reconstruct the whole URL) fixed the real failure.
+
+6. **`sub_frame` resource type.** Editing the query in Bing's own on-page
+   search box (while already on a results page) and hitting Enter doesn't
+   do a normal top-level navigation — Chrome DevTools shows it firing a
+   `document`-type request to a URL with extra params like
+   `ajaxnorecss=1&format=snrjson&jsoncbid=0`, which is Bing's internal
+   AJAX/partial-refresh mechanism: the new results are loaded into a
+   hidden iframe (`sub_frame` in extension terms, not `main_frame`) and
+   swapped into the visible page via JS, with the address bar updated
+   separately via `history.pushState`. Rules 4 and 5 both list
+   `resourceTypes: ["main_frame", "sub_frame"]` to also catch this path —
+   typing a fresh URL into the address bar is unaffected either way since
+   that's always `main_frame`.
 
 Not scoped to a specific path (just `bing.com` + a `q` param present) since
 Bing doesn't put web search under a single consistent path the way Google
