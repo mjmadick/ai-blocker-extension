@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "AI Blocker for Google Search",
-  "version": "0.1.0",
-  "description": "Suppresses Google's AI Overview in search results.",
+  "name": "AI Blocker for Search Engines",
+  "version": "0.2.0",
+  "description": "Suppresses AI-generated overviews in Google and Bing search results.",
   "permissions": ["declarativeNetRequest", "declarativeNetRequestFeedback"],
-  "host_permissions": ["*://*.google.com/*"],
+  "host_permissions": ["*://*.google.com/*", "*://*.bing.com/*"],
   "background": {
     "service_worker": "service-worker.js"
   },

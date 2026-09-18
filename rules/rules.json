@@ -46,5 +46,30 @@
       "urlFilter": "/search?*",
       "resourceTypes": ["main_frame"]
     }
+  },
+  {
+    "id": 4,
+    "priority": 2,
+    "action": { "type": "allow" },
+    "condition": {
+      "requestDomains": ["bing.com"],
+      "regexFilter": "[?&]q=[^&]*(?:\\+|%20)-ai(?:&|$)",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 5,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "regexSubstitution": "\\1\\2+-ai\\3"
+      }
+    },
+    "condition": {
+      "requestDomains": ["bing.com"],
+      "regexFilter": "^(.*[?&]q=)([^&]*)(.*)$",
+      "resourceTypes": ["main_frame"]
+    }
   }
 ]

@@ -1,9 +1,11 @@
-# AI Blocker for Google Search
+# AI Blocker for Search Engines
 
-A Chrome extension that suppresses Google's "AI Overview" and "AI Mode" in
-search results.
+A Chrome extension that suppresses AI-generated overviews in Google and
+Bing search results.
 
 ## How it works
+
+### Google
 
 Google search results skip the AI Overview when the URL has `udm=14` (the
 same trick as clicking the "Web" search filter tab). This extension uses
@@ -28,11 +30,40 @@ scoped to `google.com`, `/search` paths, `main_frame` requests only:
 3. **Redirect rule** (priority 1, lowest) — for any other `google.com/search`
    request (i.e. no `udm` param at all), add `udm=14` via a query transform.
 
-`host_permissions` for `*://*.google.com/*` is required in the manifest —
-without it, Chrome silently refuses to apply a `redirect` action to a
-`main_frame` (top-level navigation) request, even though the same
-static-ruleset-based `declarativeNetRequest` permission is enough on its
-own for actions like `block` or `allow`.
+### Bing
+
+Bing's "Copilot Search" answer box goes away when `-ai` is appended to the
+query text (e.g. `how to golf` → `how to golf -ai`) — Bing treats it as an
+explicit exclusion term rather than a UI toggle, so there's no `udm`-style
+query parameter to set here. Two more rules handle this:
+
+4. **Allow rule** (priority 2) — if the `q` value already ends in `-ai`
+   (checked via `regexFilter`, since we need to match right at the end of
+   the value, not just anywhere in the URL), leave the request alone. This
+   is the loop guard: rule 5 always appends `-ai`, so without this, a
+   second pass would append it again, compounding into `-ai -ai -ai...`
+   forever.
+5. **Redirect rule** (priority 1) — for any other `bing.com` request with a
+   `q` param, append `-ai` to it. This uses `redirect.regexSubstitution`
+   rather than `redirect.transform.queryTransform` (what the Google rules
+   use): `queryTransform.addOrReplaceParams` can only set a param to a
+   fixed literal value, it can't read and extend the existing value. The
+   `regexFilter` on the condition captures the URL into three groups
+   (everything up to and including `q=`, the existing value, everything
+   after), and `regexSubstitution` reassembles them with `-ai` spliced in
+   after the captured value.
+
+Not scoped to a specific path (just `bing.com` + a `q` param present) since
+Bing doesn't put web search under a single consistent path the way Google
+uses `/search`.
+
+### Permissions
+
+`host_permissions` for both `*://*.google.com/*` and `*://*.bing.com/*` is
+required in the manifest — without it, Chrome silently refuses to apply a
+`redirect` action to a `main_frame` (top-level navigation) request, even
+though the same static-ruleset-based `declarativeNetRequest` permission is
+enough on its own for actions like `block` or `allow`.
 
 A debug-only `service-worker.js` logs every rule match via
 `onRuleMatchedDebug` (only active for unpacked/dev-mode extensions — it's
@@ -48,6 +79,8 @@ the visible URL alone.
    (`extensions/ai-blocker-extension`)
 4. Search on Google — the results page should load with `udm=14` in the
    address bar and no AI Overview panel
+5. Search on Bing — the address bar should show `-ai` appended to your
+   query and no "Copilot Search" panel
 
 If you change `manifest.json` (e.g. permissions) or `rules/rules.json`,
 prefer removing and re-loading the extension over clicking "Reload" —
@@ -70,14 +103,19 @@ URL, independent of any real navigation.
 
 ## Status
 
-- [x] Suppress "AI Overview" via `udm=14` query rewrite
-- [x] Suppress "AI Mode" — turned out to share the `udm=50` signal with
-      AI Overview, so the same redirect rule handles it. Tapping the
+- [x] Suppress Google's "AI Overview" via `udm=14` query rewrite
+- [x] Suppress Google's "AI Mode" — turned out to share the `udm=50` signal
+      with AI Overview, so the same redirect rule handles it. Tapping the
       "AI Mode" tab is effectively a no-op.
+- [x] Suppress Bing's "Copilot Search" via appending `-ai` to the query
 
 ## Notes
 
-- Only scoped to `google.com/search` requests — other Google TLDs (e.g.
+- Only scoped to `google.com` and `bing.com` — other TLDs (e.g.
   `google.co.uk`) aren't covered yet.
-- If Google changes how the AI Overview is gated, the fix is in
-  `rules/rules.json` only.
+- A query that legitimately ends in `-ai` (e.g. a company name like
+  "x-ai") would be misread by the Bing loop guard as already suppressed
+  and passed through unmodified — a rare edge case, not worth the added
+  complexity of distinguishing it.
+- If either search engine changes how its AI answer is gated, the fix is
+  in `rules/rules.json` only.
