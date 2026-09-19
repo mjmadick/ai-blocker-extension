@@ -3,6 +3,9 @@
   "name": "AI Blocker for Search Engines",
   "version": "0.2.0",
   "description": "Suppresses AI-generated overviews in Google and Bing search results.",
+  "icons": {
+    "128": "icons/bury-ai-icon-128.png"
+  },
   "permissions": ["declarativeNetRequest", "declarativeNetRequestFeedback"],
   "host_permissions": ["*://*.google.com/*", "*://*.bing.com/*"],
   "background": {
