@@ -93,6 +93,42 @@ chrome.declarativeNetRequest.testMatchOutcome(
 This asks the compiled ruleset directly whether/which rule matches a given
 URL, independent of any real navigation.
 
+## Automated tests
+
+```bash
+npm test
+```
+
+Runs [`test/rules.test.js`](test/rules.test.js) against
+[`scripts/dnr-simulator.js`](scripts/dnr-simulator.js), a small
+reimplementation of the subset of `declarativeNetRequest`'s matching and
+redirect logic this extension actually uses (`requestDomains`, `urlFilter`,
+`regexFilter`, priority-based rule selection, `queryTransform`, `host`
+rewrites, `regexSubstitution`). Zero dependencies — just Node's built-in
+test runner (`node --test`), which is why there's a `package.json` even
+though the extension itself has no build step or dependencies.
+
+**What it catches:** regressions in `rules.json` — a query-tab value that
+stops being preserved, a rewrite that stops converging (infinite redirect
+loop), a resource type that starts leaking to sub-resources it shouldn't
+touch — plus two specific bugs from this project's history, encoded as
+standing checks so they can't quietly come back:
+- a `redirect` rule targeting `main_frame`/`sub_frame` whose domain isn't
+  covered by `host_permissions` (redirects silently never fire without it,
+  even though plain `declarativeNetRequest` is enough for `allow`/`block`)
+- a `regexFilter` with more than one unbounded `.*` (matched fine against
+  short test URLs, then silently failed to match real ~200+ character
+  search URLs)
+
+**What it does NOT catch:** anything that depends on Chrome's actual
+network stack or a search engine's real behavior — the simulator uses
+JS `RegExp`, not Chrome's RE2 engine, and it can't know when Google or
+DuckDuckGo change what suppresses their AI features. After a real change
+to `rules.json`, still verify in an actual loaded extension via
+`testMatchOutcome`/`onRuleMatchedDebug` (see Debugging above) before
+considering it done — this suite is a regression net for editing rules
+you already know work, not a substitute for that verification.
+
 ## Status
 
 - [x] Suppress Google's "AI Overview" via `udm=14` query rewrite

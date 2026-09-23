@@ -1,0 +1,8 @@
+{
+  "name": "ai-blocker-extension",
+  "private": true,
+  "description": "Dev-only test harness for the extension's declarativeNetRequest rules. Not used by the extension itself at runtime.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
