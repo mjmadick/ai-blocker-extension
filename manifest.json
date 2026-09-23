@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "AI Blocker for Search Engines",
-  "version": "0.2.0",
-  "description": "Suppresses AI-generated overviews in Google and Bing search results.",
+  "name": "AI Blocker for Google Search",
+  "version": "0.3.0",
+  "description": "Suppresses Google's AI Overview and AI Mode in search results.",
   "icons": {
     "128": "icons/bury-ai-icon-128.png"
   },
   "permissions": ["declarativeNetRequest", "declarativeNetRequestFeedback"],
-  "host_permissions": ["*://*.google.com/*", "*://*.bing.com/*"],
+  "host_permissions": ["*://*.google.com/*"],
   "background": {
     "service_worker": "service-worker.js"
   },
