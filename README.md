@@ -57,11 +57,15 @@ a `redirect` action to a `main_frame` (top-level navigation) request, even
 though the same static-ruleset-based `declarativeNetRequest` permission is
 enough on its own for actions like `block` or `allow`.
 
-A debug-only `service-worker.js` logs every rule match via
-`onRuleMatchedDebug` (only active for unpacked/dev-mode extensions — it's
-inert once published to the Chrome Web Store). Useful for confirming
-whether a request is matching, and which rule won, without guessing from
-the visible URL alone.
+`service-worker.js` can log every rule match via `onRuleMatchedDebug`, but
+this requires the `declarativeNetRequestFeedback` permission, which is
+*not* in the published manifest — it only works for unpacked/dev-mode
+extensions and does nothing for anyone who installs this normally, so
+there's no reason to carry it (and justify it to Web Store reviewers) in
+the shipped version. Add `"declarativeNetRequestFeedback"` to
+`manifest.json`'s `permissions` array temporarily if you need it while
+debugging a rule change locally (see "Debugging" below), then remove it
+again before publishing.
 
 ## Install (unpacked, for development)
 
@@ -80,8 +84,11 @@ reload doesn't always pick up permission changes reliably.
 
 ## Debugging
 
-Open the extension's service worker console from its card on
-`chrome://extensions` (click "service worker"), then:
+Both techniques below require `"declarativeNetRequestFeedback"` in
+`manifest.json`'s `permissions` array (removed from the published
+manifest — see "Permissions" above). Add it back locally, remove/re-add
+the unpacked extension, then open the extension's service worker console
+from its card on `chrome://extensions` (click "service worker"):
 
 ```js
 chrome.declarativeNetRequest.testMatchOutcome(
@@ -155,3 +162,13 @@ you already know work, not a substitute for that verification.
   `google.co.uk`) aren't covered yet.
 - If a search engine changes how its AI answer is gated, the fix is in
   `rules/rules.json` only.
+
+## Publishing to the Chrome Web Store
+
+See [`CHROMEWEBSTORE.md`](CHROMEWEBSTORE.md) for listing copy, permission
+justifications, and the pre-submission checklist, and
+[`PRIVACY.md`](PRIVACY.md) for the privacy policy (linked from the listing
+as a GitHub-rendered page — no separate hosting needed while the repo
+stays public). Run `./scripts/package-for-webstore.sh` to build the ZIP
+to upload — it excludes `test/`, `scripts/`, `package.json`, and the
+markdown docs, none of which the extension needs at runtime.
