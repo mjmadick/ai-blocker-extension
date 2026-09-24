@@ -11,8 +11,9 @@ in regards to COPPA compliance.
 
 The Bury AI extension is intended to be as simple as possible, 
 relying only on URL rewrites to suppress AI content, and not rely on 
-javascript or modifying the page DOM. The extension is in a public repo
-so others can see exactly what is happening. 
+javascript or modifying the page DOM. The extension code is in a 
+public repo (https://github.com/mjmadick/ai-blocker-extension) 
+so anyone can see exactly how it works.
 
 The Bury AI extension is intended to be used as one component of a wider 
 effort to block AI for students on a school network. Since the extension only 
@@ -20,9 +21,10 @@ blocks AI content in Google's and DuckDuckGo's search results, the
 extension should be combined with an additional URL blocking filter/layer
 set to fully block AI specific sites (e.g. ChatGPT, Claude) and other 
 search engines that proved problematic in removing AI content via 
-simple URL rewrites (e.g. Bing, Yahoo). If students need to search the 
-web, they are limited to Google and DuckDuckGo, and will only see traditional 
-search results without AI summaries. 
+simple URL rewrites (e.g. Bing, Yahoo), and combined with controls 
+that prevent students from using Google in other locales (e.g. google.co.uk). 
+If students need to search the web, they are limited to Google and DuckDuckGo, 
+and will only see traditional search results without AI summaries. 
 
 ## How it works
 
