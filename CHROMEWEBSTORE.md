@@ -1,23 +1,26 @@
-# Chrome Web Store Listing — AI Blocker for Search Engines
+# Chrome Web Store Listing — Bury AI
 
 > Last Updated: 2026-09-23
+
+Product/listing name is "Bury AI"; the GitHub repo stays
+`ai-blocker-extension` (not renamed — no reason to churn the URL).
 
 ## Store Listing
 
 **Extension Name**
-AI Blocker for Search Engines
+Bury AI
 <!-- Must exactly match manifest.json "name". -->
 
 **Short Description**
-Suppresses AI Overview and AI Mode on Google, and AI-generated summaries on DuckDuckGo, in search results.
-<!-- 106 characters -->
+Blocks AI Overview & AI Mode on Google and AI summaries on DuckDuckGo search results.
+<!-- 85 characters -->
 
 **Detailed Description**
 
 ```
-Removes AI-generated answer summaries from Google and DuckDuckGo search
-results, so you see the same organic search results you always have —
-without an AI box at the top.
+Bury AI blocks AI-generated answer summaries from Google and
+DuckDuckGo search results, so you see the same organic search results
+you always have — without an AI box at the top.
 
 FEATURES
 • Google: automatically switches to the "Web" results view, which
@@ -31,14 +34,14 @@ FEATURES
   summaries).
 
 HOW TO USE
-Nothing to configure. Install the extension and search normally on
-Google or DuckDuckGo — it works automatically in the background.
+Nothing to configure. Install Bury AI and search normally on Google or
+DuckDuckGo — it blocks AI answers automatically in the background.
 
 PRIVACY
-This extension does not collect any personal data, does not use
-cookies or analytics, and never reads the content of any page you
-visit. It only changes the address of a search page before it loads.
-Full privacy policy: [FILL IN: privacy policy URL]
+Bury AI does not collect any personal data, does not use cookies or
+analytics, and never reads the content of any page you visit. It only
+changes the address of a search page before it loads.
+Full privacy policy: https://github.com/mjmadick/ai-blocker-extension/blob/main/PRIVACY.md
 
 PERMISSIONS
 "Read and change your data on google.com and duckduckgo.com" — needed
@@ -47,10 +50,15 @@ the non-AI version before it loads. The extension does not read page
 content, cookies, or browsing history on these or any other site.
 
 SUPPORT
-Found a bug or have a suggestion? [FILL IN: support email or URL]
+Found a bug or have a suggestion? email mjmadick@gmail.com
 
-Version 0.4.1
+Version 0.5.0
 ```
+
+<!-- "Bury AI" appears in the name; "block(s) AI" appears in the short
+     description and twice in the detailed description (opener + "HOW TO
+     USE") for search relevance against queries like "block ai" - kept to
+     natural, non-repetitive phrasing per CWS's keyword-stuffing rule. -->
 
 **Category**
 Search Tools
@@ -109,12 +117,13 @@ make. See [`PRIVACY.md`](PRIVACY.md) for the full policy.
 [`PRIVACY.md`](PRIVACY.md) in this repo, rendered by GitHub at:
 `https://github.com/mjmadick/ai-blocker-extension/blob/main/PRIVACY.md`
 
-<!-- This works as a "publicly accessible URL" since the repo is public
-     and GitHub renders .md files as a normal web page. If the repo is
-     ever made private, this URL stops being publicly accessible and a
-     different host (GitHub Pages, a project site, etc.) is needed
-     instead — see references/webstore/privacy-policy.md in the
-     chrome-extensions skill for hosting options. -->
+<!-- Requires the repo to be public (planned) for this URL to actually be
+     publicly accessible - confirm the repo visibility switch happened
+     before submitting, and re-check the link loads logged out. If the
+     repo is ever made private again later, a different host (GitHub
+     Pages, a project site, etc.) would be needed instead - see
+     references/webstore/privacy-policy.md in the chrome-extensions skill
+     for hosting options. -->
 
 ## Packaging
 
@@ -130,21 +139,22 @@ what to upload to the CWS dashboard, not the repo itself.
 ## Developer Info
 
 **Publisher Name**
-[FILL IN]
+Michael Madick
 
 **Contact Email**
-[FILL IN — must be an address you actively monitor; Google sends policy/takedown notices here]
+mjmadick@gmail.com
 
 **Support URL / Email**
-[FILL IN]
+mjmadick@gmail.com
 
 **Homepage URL**
-`https://github.com/mjmadick/ai-blocker-extension` (or leave blank)
+`https://github.com/mjmadick/ai-blocker-extension`
 
 ## Version History
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
+| 0.5.0 | 2026-09-23 | Renamed listing/extension to "Bury AI" (repo path unchanged). Reworked description copy to include "block AI" for store-search relevance, since several existing CWS listings already use "block AI" in their name. | Draft |
 | 0.4.1 | 2026-09-23 | Removed unused `declarativeNetRequestFeedback` permission ahead of submission (dev-only, inert once published). | Draft |
 | 0.4.0 | 2026-09-23 | Added DuckDuckGo support (redirect to `noai.duckduckgo.com`). Removed Bing support (see Known Issues). | Draft |
 | 0.3.0 | 2026-09-18 | Removed Bing suppression logic; back to Google + (later) DuckDuckGo only. | Draft |
@@ -164,11 +174,15 @@ what to upload to the CWS dashboard, not the repo itself.
   why); both are blocked outright at the network level in this
   deployment's environment instead, so their absence here isn't a gap
   for the intended use case, but is worth knowing if a reviewer asks
-  why "AI Blocker for Search Engines" doesn't cover every engine.
+  why "Bury AI" doesn't cover every search engine.
 - `declarativeNetRequestFeedback` was intentionally removed before
   first submission (see Version History) — no action needed here,
   noted so a future permission audit doesn't wonder why the README
   mentions it.
+- The listing name "Bury AI" was chosen partly to stand out from
+  several existing "Block AI"-named extensions already on the store —
+  "block AI" is instead placed in the description/keywords so the
+  listing can still surface in searches for that phrase.
 
 ### Rejection History
 

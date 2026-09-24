@@ -1,13 +1,13 @@
-# Privacy Policy for AI Blocker for Search Engines
+# Privacy Policy for Bury AI
 
 Last updated: 2026-09-23
 
-AI Blocker for Search Engines does not collect, store, or transmit any
-personal data or browsing information. All it does is adjust the address
-of a Google or DuckDuckGo search page — from your own device, to Google's
-or DuckDuckGo's own servers — before the page loads, so it opens without
-an AI-generated summary. It never reads, inspects, or modifies the content
-of any page you visit.
+Bury AI does not collect, store, or transmit any personal data or
+browsing information. All it does is adjust the address of a Google or
+DuckDuckGo search page — from your own device, to Google's or
+DuckDuckGo's own servers — before the page loads, so it opens without
+an AI-generated summary. It never reads, inspects, or modifies the
+content of any page you visit.
 
 ## What data we collect
 
@@ -44,5 +44,4 @@ If this policy ever changes, the "Last updated" date above will change
 and the update will be noted in the extension's Chrome Web Store listing.
 
 ## Contact
-
-[FILL IN: an email or support URL where privacy questions can be sent]
+mjmadick@gmail.com

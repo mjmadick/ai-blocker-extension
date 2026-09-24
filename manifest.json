@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "AI Blocker for Search Engines",
-  "version": "0.4.1",
-  "description": "Suppresses Google's AI Overview and AI Mode, and DuckDuckGo's AI-generated summaries, in search results.",
+  "name": "Bury AI",
+  "version": "0.5.0",
+  "description": "Blocks AI Overview & AI Mode on Google and AI summaries on DuckDuckGo search results.",
   "icons": {
     "128": "icons/bury-ai-icon-128.png"
   },

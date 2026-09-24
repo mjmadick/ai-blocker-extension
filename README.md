@@ -1,7 +1,10 @@
-# AI Blocker for Search Engines
+# Bury AI
 
 A Chrome extension that suppresses Google's "AI Overview" and "AI Mode",
 and DuckDuckGo's AI-generated summaries, in search results.
+
+(The repository is still named `ai-blocker-extension` — only the
+extension/listing name changed to "Bury AI".)
 
 ## How it works
 
