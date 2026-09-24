@@ -11,8 +11,9 @@ in regards to COPPA compliance.
 
 The Bury AI extension is intended to be as simple as possible, 
 relying only on URL rewrites to suppress AI content, and not rely on 
-javascript or modifying the page DOM. The extension is in a public repo
-so others can see exactly what is happening. 
+javascript or modifying the page DOM. The extension code is in a 
+public repo (https://github.com/mjmadick/ai-blocker-extension) 
+so anyone can see exactly how it works.
 
 The Bury AI extension is intended to be used as one component of a wider 
 effort to block AI for students on a school network. Since the extension only 
