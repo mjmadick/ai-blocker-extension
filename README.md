@@ -20,9 +20,10 @@ blocks AI content in Google's and DuckDuckGo's search results, the
 extension should be combined with an additional URL blocking filter/layer
 set to fully block AI specific sites (e.g. ChatGPT, Claude) and other 
 search engines that proved problematic in removing AI content via 
-simple URL rewrites (e.g. Bing, Yahoo). If students need to search the 
-web, they are limited to Google and DuckDuckGo, and will only see traditional 
-search results without AI summaries. 
+simple URL rewrites (e.g. Bing, Yahoo), and combined with controls 
+that prevent students from using Google in other locales (e.g. google.co.uk). 
+If students need to search the web, they are limited to Google and DuckDuckGo, 
+and will only see traditional search results without AI summaries. 
 
 ## How it works
 
