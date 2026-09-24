@@ -3,8 +3,24 @@
 A Chrome extension that suppresses Google's "AI Overview" and "AI Mode",
 and DuckDuckGo's AI-generated summaries, in search results.
 
-(The repository is still named `ai-blocker-extension` — only the
-extension/listing name changed to "Bury AI".)
+## Purpose
+We created Bury AI to help block AI content in our K-8 school. 
+While there are plenty of other AI blocker extensions available, 
+they come with concerns over security and data privacy, specifically 
+in regards to COPPA compliance. 
+
+The Bury AI extension is intended to be as simple as possible, 
+relying only on URL rewrites to suppress AI content, and not rely on 
+javascript or modifying the page DOM. The extension is in a public repo
+so others can see exactly what is happening. 
+
+The Bury AI extension is intended to be used as one component of a wider 
+effort to block AI for students on a school network. Since the extension only 
+blocks AI content in Google's and DuckDuckGo's search results, the 
+extension should be combined with an additional URL blocking filter/layer
+set to fully block AI specific sites (e.g. ChatGPT, Claude) and other 
+search engines that proved problematic in removing AI content via 
+simple URL rewrites (e.g. Bing, Yahoo).
 
 ## How it works
 
